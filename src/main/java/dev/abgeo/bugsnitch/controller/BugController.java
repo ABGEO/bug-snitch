@@ -5,9 +5,11 @@ import dev.abgeo.bugsnitch.repository.BugRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * CRUD Controller for Bug entity.
@@ -31,9 +33,11 @@ public class BugController {
      *
      * @return Created entity.
      */
+    @Async
     @PostMapping("/bug")
-    public ResponseEntity<Bug> create(@RequestBody Bug bug) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bugRepository.save(bug));
+    public CompletableFuture<ResponseEntity<Bug>> create(@RequestBody Bug bug) {
+        return CompletableFuture
+                .completedFuture(ResponseEntity.status(HttpStatus.CREATED).body(bugRepository.save(bug)));
     }
 
     /**
@@ -41,9 +45,10 @@ public class BugController {
      *
      * @return List og Bugs.
      */
+    @Async
     @GetMapping("/bug")
-    public List<Bug> getAll() {
-        return bugRepository.findAll();
+    public CompletableFuture<List<Bug>> getAll() {
+        return CompletableFuture.completedFuture(bugRepository.findAll());
     }
 
     /**
@@ -53,11 +58,12 @@ public class BugController {
      *
      * @return Bug entity if exists, or 404 with empty body.
      */
+    @Async
     @GetMapping("/bug/{id}")
-    public ResponseEntity<Bug> getSingle(@PathVariable Long id) {
-        return bugRepository.findById(id)
+    public CompletableFuture<ResponseEntity<Bug>> getSingle(@PathVariable Long id) {
+        return CompletableFuture.completedFuture(bugRepository.findById(id)
                 .map(bug -> ResponseEntity.ok().body(bug))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
 
     }
 
@@ -69,9 +75,10 @@ public class BugController {
      *
      * @return Updated Bug entity if exists, or 404 with empty body.
      */
+    @Async
     @PatchMapping("/bug/{id}")
-    public ResponseEntity<Bug> update(@RequestBody Bug bug, @PathVariable Long id) {
-        return bugRepository.findById(id)
+    public CompletableFuture<ResponseEntity<Bug>> update(@RequestBody Bug bug, @PathVariable Long id) {
+        return CompletableFuture.completedFuture(bugRepository.findById(id)
                 .map(b -> {
                     b.setTitle(bug.getTitle());
                     b.setBody(bug.getBody());
@@ -80,7 +87,7 @@ public class BugController {
 
                     return ResponseEntity.ok().body(bugRepository.save(b));
                 })
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
 
     /**
@@ -90,14 +97,15 @@ public class BugController {
      *
      * @return 200 with empty body if deleted, or 404.
      */
+    @Async
     @DeleteMapping("/bug/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        return bugRepository.findById(id)
+    public CompletableFuture<ResponseEntity<?>> delete(@PathVariable Long id) {
+        return CompletableFuture.completedFuture(bugRepository.findById(id)
                 .map(bug -> {
                     bugRepository.delete(bug);
                     return ResponseEntity.status(HttpStatus.OK).build();
                 })
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
 
 }
