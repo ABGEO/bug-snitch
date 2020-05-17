@@ -15,6 +15,7 @@ public class Bug {
 
     private String title;
 
+    @Column(length = 2048)
     private String body;
 
     @CreationTimestamp
