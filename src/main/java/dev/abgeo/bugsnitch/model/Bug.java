@@ -1,5 +1,7 @@
 package dev.abgeo.bugsnitch.model;
 
+import dev.abgeo.bugsnitch.type.Priority;
+import dev.abgeo.bugsnitch.type.Status;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -20,6 +22,12 @@ public class Bug {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @Enumerated
+    private Priority priority = Priority.LOW;
+
+    @Enumerated
+    private Status status = Status.OPEN;
 
     public Long getId() {
         return id;
@@ -47,6 +55,22 @@ public class Bug {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
 }
