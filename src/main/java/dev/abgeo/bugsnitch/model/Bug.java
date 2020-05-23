@@ -1,15 +1,23 @@
 package dev.abgeo.bugsnitch.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.abgeo.bugsnitch.eventListener.BugEntityListener;
 import dev.abgeo.bugsnitch.type.Priority;
 import dev.abgeo.bugsnitch.type.Status;
+import org.apache.commons.lang3.SerializationUtils;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "bug")
-public class Bug {
+@EntityListeners(BugEntityListener.class)
+public class Bug implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +36,15 @@ public class Bug {
 
     @Enumerated
     private Status status = Status.OPEN;
+
+    @OneToMany(mappedBy = "bug")
+    @Fetch(FetchMode.JOIN)
+    @OrderBy("id DESC")
+    private Set<BugStatusHistory> statusHistory;
+
+    @Transient
+    @JsonIgnore
+    private transient Bug savedState;
 
     public Long getId() {
         return id;
@@ -53,10 +70,6 @@ public class Bug {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Priority getPriority() {
         return priority;
     }
@@ -71,6 +84,21 @@ public class Bug {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Set<BugStatusHistory> getStatusHistory() {
+        return statusHistory;
+    }
+
+    /**
+     * Clone current state to <b>this.savedState</b>.
+     */
+    public void saveState() {
+        this.savedState = SerializationUtils.clone(this);
+    }
+
+    public Bug getSavedState() {
+        return savedState;
     }
 
 }

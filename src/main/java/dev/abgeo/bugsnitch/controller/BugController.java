@@ -19,6 +19,9 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 public class BugController {
 
+    /**
+     * Bug Repository dependency.
+     */
     BugRepository bugRepository;
 
     @Autowired
