@@ -39,6 +39,48 @@
 			"response": []
 		},
 		{
+			"name": "Comment Bug",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"body\": \"Body\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/bug/:id/comment",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"bug",
+						":id",
+						"comment"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "",
+							"description": "Bug ID"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get All Bugs",
 			"request": {
 				"method": "GET",
@@ -50,6 +92,31 @@
 					],
 					"path": [
 						"bug"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Bug Comments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/bug/:id/comment",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"bug",
+						":id",
+						"comment"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -106,6 +173,31 @@
 			"response": []
 		},
 		{
+			"name": "Delete Comment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/comment/:id",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"comment",
+						":id"
+					],
+					"variable": [
+						{
+							"description": "Comment ID",
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Edit Bug",
 			"request": {
 				"method": "PATCH",
@@ -141,6 +233,64 @@
 							"key": "id",
 							"value": ""
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Comment",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"body\": \"New Body\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/comment/:id",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"comment",
+						":id"
+					],
+					"variable": [
+						{
+							"description": "Comment ID",
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Bugs Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/bug",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"bug"
 					]
 				}
 			},
