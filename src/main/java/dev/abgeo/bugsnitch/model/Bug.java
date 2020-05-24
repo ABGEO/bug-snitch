@@ -46,6 +46,11 @@ public class Bug implements Serializable {
     @JsonIgnore
     private transient Bug savedState;
 
+    @OneToMany(mappedBy = "bug")
+    @Transient
+    @JsonIgnore
+    private Set<Comment> comments;
+
     public Long getId() {
         return id;
     }
