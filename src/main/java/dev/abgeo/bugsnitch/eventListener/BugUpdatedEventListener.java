@@ -5,6 +5,7 @@ import dev.abgeo.bugsnitch.model.Bug;
 import dev.abgeo.bugsnitch.model.BugStatusHistory;
 import dev.abgeo.bugsnitch.repository.BugRepository;
 import dev.abgeo.bugsnitch.repository.BugStatusHistoryRepository;
+import dev.abgeo.bugsnitch.service.WebSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -27,15 +28,26 @@ public class BugUpdatedEventListener implements ApplicationListener<BugUpdatedEv
      */
     private final BugStatusHistoryRepository bugStatusHistoryRepository;
 
+    /**
+     * WebSocketService dependency.
+     */
+    private final WebSocketService webSocketService;
+
     @Autowired
-    public BugUpdatedEventListener(BugRepository bugRepository, BugStatusHistoryRepository bugStatusHistoryRepository) {
+    public BugUpdatedEventListener(
+            BugRepository bugRepository,
+            BugStatusHistoryRepository bugStatusHistoryRepository,
+            WebSocketService webSocketService
+    ) {
         this.bugStatusHistoryRepository = bugStatusHistoryRepository;
         this.bugRepository = bugRepository;
+        this.webSocketService = webSocketService;
     }
 
     @Override
     public void onApplicationEvent(BugUpdatedEvent event) {
         createChangeHistoryEntry(event.getBug());
+        webSocketService.bugUpdated(event.getBug());
     }
 
     /**
