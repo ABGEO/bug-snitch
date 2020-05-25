@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Component;
 
 /**
- * Publish events for Bug entity.
+ * Publish BugCreatedEvent.
  *
  * @author Temuri Takalandze
  */
@@ -25,7 +25,7 @@ public class BugCreatedEventPublisher implements ApplicationEventPublisherAware 
     }
 
     /**
-     * Publish events for given Bug entity.
+     * Publish BugCreatedEvent.
      *
      * @param bug Bug entity.
      */

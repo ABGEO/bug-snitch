@@ -33,6 +33,16 @@ public class WebSocketService {
     }
 
     /**
+     * Publish deleted Bug entity.
+     *
+     * @param bug Deleted Bug entity
+     */
+    public void bugDeleted(Bug bug) {
+        System.out.println("bugDeleted");
+        messagingTemplate.convertAndSend("/topic/bug/delete", bug);
+    }
+
+    /**
      * Publish updated Bug entity.
      *
      * @param bug Updated Bug entity
