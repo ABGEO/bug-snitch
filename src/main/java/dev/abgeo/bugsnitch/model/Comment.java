@@ -1,6 +1,7 @@
 package dev.abgeo.bugsnitch.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.abgeo.bugsnitch.eventListener.CommentEntityListener;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comment")
+@EntityListeners(CommentEntityListener.class)
 public class Comment {
 
     @Id
