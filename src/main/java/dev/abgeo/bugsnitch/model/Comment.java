@@ -3,6 +3,7 @@ package dev.abgeo.bugsnitch.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.abgeo.bugsnitch.eventListener.CommentEntityListener;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,6 +28,9 @@ public class Comment {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
     public Long getId() {
         return id;
     }
@@ -49,6 +53,10 @@ public class Comment {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
 }
