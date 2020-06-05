@@ -2,12 +2,16 @@ package dev.abgeo.bugsnitch.controller;
 
 import dev.abgeo.bugsnitch.BaseControllerTest;
 import dev.abgeo.bugsnitch.model.Bug;
+import dev.abgeo.bugsnitch.model.Comment;
 import dev.abgeo.bugsnitch.repository.BugRepository;
+import dev.abgeo.bugsnitch.repository.CommentRepository;
 import dev.abgeo.bugsnitch.type.Priority;
 import dev.abgeo.bugsnitch.type.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -19,6 +23,7 @@ public class BugControllerTest extends BaseControllerTest {
 
     @Autowired
     private BugRepository bugRepository;
+    private CommentRepository commentRepository;
 
     @Test
     public void testCreate_invalidPriority() throws Exception {
@@ -110,9 +115,9 @@ public class BugControllerTest extends BaseControllerTest {
                 "\"status\":\"FIXED\"}\n";
 
         mockMvc.perform(asyncDispatch(mockMvc.perform(patch("/bug/" + newBug.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(bugJson))
-                    .andReturn()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(bugJson))
+                .andReturn()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.title", is("New Bug Updated")))
@@ -135,4 +140,50 @@ public class BugControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void updateBugCommentTest() throws Exception {
+        // Update Existing Comment.
+        Comment newComment = new Comment();
+        newComment.setBody("New Comment");
+
+        commentRepository.save(newComment);
+
+        String commentJson = "{\"body\":\"New Bug Body Updated\"}\n";
+
+        mockMvc.perform(asyncDispatch(mockMvc.perform(patch("/comment/" + newComment.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(commentJson))
+                .andReturn()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.body", is("New Bug comment Updated")));
+
+
+
+    }
+
+    @Test
+    public void deleteCommentTest() throws Exception{
+        //Delete Comment
+        mockMvc.perform(asyncDispatch(mockMvc.perform(
+                delete("/comment/" + bugRepository.findAll().get(0).getId())
+        ).andReturn()))
+                .andExpect(status().isOk());
+
+}
+
+@Test
+    public void createCommentTest() throws Exception{
+        //Create Comment
+    String commentJson = "{\"body\":\"Test Bug Body\"}\n";
+
+    MvcResult mvcResult = mockMvc.perform(post("/comment")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(commentJson))
+            .andReturn();
+
+    mockMvc.perform(asyncDispatch(mvcResult))
+            .andExpect(status().isCreated())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.body", is("Test Comment Body")));
+}
 }
