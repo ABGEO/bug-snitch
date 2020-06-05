@@ -278,23 +278,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "Get All Bugs Copy",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api_url}}/bug",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"bug"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}

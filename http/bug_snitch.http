@@ -1,0 +1,54 @@
+### Create Bug
+POST {{host}}/bug
+Content-Type: application/json
+
+{
+  "title": "Title",
+  "body": "Body",
+  "priority": "CRITICAL",
+  "status": "OPEN"
+}
+
+### Comment Bug
+POST {{host}}/bug/{{bugId}}/comment
+Content-Type: application/json
+
+{
+  "body": "Body"
+}
+
+### Get all Bugs
+GET {{host}}/bug
+
+### Get Bug Comments
+GET {{host}}/bug/{{bugId}}/comment
+
+### Get single Bug
+GET {{host}}/bug/{{bugId}}
+
+### Delete Bug
+DELETE {{host}}/bug/{{bugId}}
+
+### Delete Comment
+DELETE {{host}}/comment/{{commentId}}
+
+### Update Bug
+PATCH {{host}}/bug/{{bugId}}
+Content-Type: application/json
+
+{
+  "title": "New Title",
+  "body": "New Body",
+  "priority": "MEDIUM",
+  "status": "UNCONFIRMED"
+}
+
+### Update Comment
+PATCH {{host}}/comment/{{commentId}}
+Content-Type: application/json
+
+{
+  "body": "New Body"
+}
+
+###
