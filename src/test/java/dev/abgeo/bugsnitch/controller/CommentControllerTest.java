@@ -1,49 +1,58 @@
-public class CommentControllerTest extends BaseControllerTest{
+package dev.abgeo.bugsnitch.controller;
+
+import dev.abgeo.bugsnitch.BaseControllerTest;
+import dev.abgeo.bugsnitch.model.Comment;
+import dev.abgeo.bugsnitch.repository.BugRepository;
+import dev.abgeo.bugsnitch.repository.CommentRepository;
+import dev.abgeo.bugsnitch.service.WebSocketService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
+
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+public class CommentControllerTest extends BaseControllerTest {
 
     @Autowired
-
     private CommentRepository commentRepository;
 
+    @Autowired
+    private BugRepository bugRepository;
+
+    @MockBean
+    private WebSocketService webSocketService;
 
     @Test
     public void updateBugCommentTest() throws Exception {
-        // Update Existing Comment.
         Comment newComment = new Comment();
         newComment.setBody("New Comment");
-
         commentRepository.save(newComment);
-
-        String commentJson = "{\"body\":\"New Bug Body Updated\"}\n";
 
         mockMvc.perform(asyncDispatch(mockMvc.perform(patch("/comment/" + newComment.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(commentJson))
+                .content("{\"body\":\"New Comment Updated\"}"))
                 .andReturn()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.body", is("New Bug comment Updated")));
-
-
-
+                .andExpect(jsonPath("$.body", is("New Comment Updated")));
     }
 
     @Test
-    public void deleteCommentTest() throws Exception{
-        //Delete Comment
+    public void deleteCommentTest() throws Exception {
         mockMvc.perform(asyncDispatch(mockMvc.perform(
-                delete("/comment/" + bugRepository.findAll().get(0).getId())
+                delete("/comment/" + commentRepository.findAll().get(0).getId())
         ).andReturn()))
                 .andExpect(status().isOk());
-
     }
 
     @Test
-    public void createCommentTest() throws Exception{
-        //Create Comment
-        String commentJson = "{\"body\":\"Test Bug Body\"}\n";
-
-        MvcResult mvcResult = mockMvc.perform(post("/comment")
+    public void createCommentTest() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(post("/bug/" + bugRepository.findAll().get(0).getId() + "/comment")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(commentJson))
+                .content("{\"body\":\"Test Comment Body\"}\n"))
                 .andReturn();
 
         mockMvc.perform(asyncDispatch(mvcResult))
@@ -51,4 +60,5 @@ public class CommentControllerTest extends BaseControllerTest{
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.body", is("Test Comment Body")));
     }
+
 }

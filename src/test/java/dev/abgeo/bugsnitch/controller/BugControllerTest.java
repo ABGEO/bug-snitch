@@ -2,16 +2,12 @@ package dev.abgeo.bugsnitch.controller;
 
 import dev.abgeo.bugsnitch.BaseControllerTest;
 import dev.abgeo.bugsnitch.model.Bug;
-import dev.abgeo.bugsnitch.model.Comment;
 import dev.abgeo.bugsnitch.repository.BugRepository;
-import dev.abgeo.bugsnitch.repository.CommentRepository;
 import dev.abgeo.bugsnitch.type.Priority;
 import dev.abgeo.bugsnitch.type.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -138,6 +134,5 @@ public class BugControllerTest extends BaseControllerTest {
         ).andReturn()))
                 .andExpect(status().isOk());
     }
-
 
 }
